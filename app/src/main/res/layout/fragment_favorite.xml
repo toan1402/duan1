@@ -6,10 +6,11 @@
     android:padding="24dp">
 
     <TextView
-        android:id="@id/tvFavorite"
+        android:id="@+id/tvFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Danh sách yêu thích"
         android:textSize="20sp"
         android:textStyle="bold" />
+
 </FrameLayout>
