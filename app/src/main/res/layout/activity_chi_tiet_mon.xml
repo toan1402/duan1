@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5733D"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_margin="5dp"
+        android:clipToPadding="false"
+        android:backgroundTint="#E5733D"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:backgroundTintMode="src_over"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_rounded_corner">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|start">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="Back"
+                android:background="@drawable/bg_circle_white"
+                android:padding="6dp"
+            android:scaleType="centerInside" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="chi tiết món"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginEnd="24dp"/>
+        </LinearLayout>
+
+        <!-- Ảnh món -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/comsuon"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_rounded_corner" />
+
+        <!-- Tên món -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cơm sườn - ốp la"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"/>
+
+        <!-- Đánh giá -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_star"
+                android:layout_marginEnd="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.7"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" | 99 đánh giá"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:layout_marginStart="6dp"/>
+        </LinearLayout>
+
+        <!-- Nút mua ngay -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mua ngay"
+            android:layout_marginTop="12dp"
+            android:textColor="#000000"
+            android:backgroundTint="#F2FF00"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"/>
+
+        <!-- Món mới -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Món mới hãy thử"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Danh sách món mới -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:weightSum="2">
+
+            <!-- Món 1 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="231dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_rounded_gray"
+                android:backgroundTint="#EEEEEE"
+                android:backgroundTintMode="src_over"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/banhmy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên: Bánh mì"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giá: 35.000đ"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="đánh giá :"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Món 2 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="239dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_rounded_gray"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/banhmy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên: Bánh mì"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giá: 35.000đ"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="đánh giá :"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
