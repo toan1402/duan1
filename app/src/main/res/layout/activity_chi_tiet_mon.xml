@@ -12,12 +12,10 @@
         android:padding="12dp"
         android:layout_margin="5dp"
         android:clipToPadding="false"
-        android:backgroundTint="#E5733D"
         android:layout_gravity="center"
         android:layout_marginBottom="12dp"
-        android:backgroundTintMode="src_over"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_rounded_corner">
+        android:background="@color/white">
 
         <!-- Header -->
         <LinearLayout
@@ -26,20 +24,20 @@
             android:orientation="horizontal"
             android:gravity="center_vertical|start">
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/btnBack"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/ic_back"
                 android:contentDescription="Back"
                 android:background="@drawable/bg_circle_white"
                 android:padding="6dp"
-            android:scaleType="centerInside" />
-
+                android:scaleType="centerInside" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="chi tiết món"
+                android:text="Chi tiết món"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:textSize="18sp"
@@ -49,54 +47,46 @@
 
         <!-- Ảnh món -->
         <ImageView
+            android:id="@+id/imgProduct"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:src="@drawable/comsuon"
             android:scaleType="centerCrop"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_rounded_corner" />
 
         <!-- Tên món -->
         <TextView
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cơm sườn - ốp la"
+            android:text="Tên món"
             android:textColor="#000000"
             android:textSize="16sp"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp" />
 
-        <!-- Đánh giá -->
-        <LinearLayout
+        <!-- Giá món -->
+        <TextView
+            android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="4dp">
+            android:text="Giá: "
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_star"
-                android:layout_marginEnd="4dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4.7"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" | 99 đánh giá"
-                android:textColor="#ffffff"
-                android:textSize="16sp"
-                android:layout_marginStart="6dp"/>
-        </LinearLayout>
+        <!-- Danh mục -->
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh mục: "
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
 
         <!-- Nút mua ngay -->
         <Button
+            android:id="@+id/btnBuyNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mua ngay"
@@ -104,7 +94,7 @@
             android:textColor="#000000"
             android:backgroundTint="#F2FF00"
             android:paddingLeft="18dp"
-            android:paddingRight="18dp"/>
+            android:paddingRight="18dp" />
 
         <!-- Món mới -->
         <TextView
@@ -132,8 +122,6 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_rounded_gray"
-                android:backgroundTint="#EEEEEE"
-                android:backgroundTintMode="src_over"
                 android:orientation="vertical"
                 android:padding="8dp">
 
@@ -160,7 +148,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="đánh giá :"
+                    android:text="Đánh giá: 4.5★"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -198,11 +186,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="đánh giá :"
+                    android:text="Đánh giá: 4.5★"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

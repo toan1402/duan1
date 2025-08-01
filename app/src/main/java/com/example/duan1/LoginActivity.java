@@ -19,8 +19,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dangnhap); // tên layout đăng nhập
+        setContentView(R.layout.activity_dangnhap); // Layout đăng nhập
 
+        // Ánh xạ các thành phần
         txtUser = findViewById(R.id.txtuser);
         txtPass = findViewById(R.id.txtpass);
         btnLogin = findViewById(R.id.btnlogin);
@@ -28,53 +29,75 @@ public class LoginActivity extends AppCompatActivity {
         btnDoiMatKhau = findViewById(R.id.btnDoiMatKhau);
         ckMatKhau = findViewById(R.id.ckMatkhau);
 
-        // Đọc SharedPreferences lưu thông tin ghi nhớ đăng nhập
-        SharedPreferences loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        boolean remember = loginPrefs.getBoolean("remember", false);
-
+        // Đọc lại tài khoản đã ghi nhớ nếu có
+        SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        boolean remember = preferences.getBoolean("remember", false);
         if (remember) {
-            txtUser.setText(loginPrefs.getString("username", ""));
-            txtPass.setText(loginPrefs.getString("password", ""));
+            txtUser.setText(preferences.getString("username", ""));
+            txtPass.setText(preferences.getString("password", ""));
             ckMatKhau.setChecked(true);
         }
 
+        // Xử lý đăng nhập
         btnLogin.setOnClickListener(v -> {
             String inputUsername = txtUser.getText().toString().trim();
             String inputPassword = txtPass.getText().toString().trim();
 
-            // 🔒 Đọc tài khoản đã đăng ký từ SharedPreferences "user_data"
-            SharedPreferences userPrefs = getSharedPreferences("user_data", MODE_PRIVATE);
-            String savedUsername = userPrefs.getString("username", "");
-            String savedPassword = userPrefs.getString("password", "");
+            if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            // Lấy dữ liệu từ SharedPreferences của RegisterActivity
+            SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+            String savedUsername = prefs.getString("username", "");
+            String savedPassword = prefs.getString("password", "");
+            String savedEmail = prefs.getString("email", "user@example.com");
+            String savedPhone = prefs.getString("sdt", "Chưa có số");
+            String savedAddress = prefs.getString("diachi", "Chưa có địa chỉ");
+
+            // So sánh thông tin nhập vào
             if (inputUsername.equals(savedUsername) && inputPassword.equals(savedPassword)) {
                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                // Ghi nhớ tài khoản nếu chọn
+                // Lưu thông tin người dùng vào USER_FILE cho AccountActivity
+                SharedPreferences userPrefs = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+                SharedPreferences.Editor userEditor = userPrefs.edit();
+                userEditor.putString("USERNAME", inputUsername);
+                userEditor.putString("EMAIL", savedEmail);
+                userEditor.putString("PHONE", savedPhone);
+                userEditor.putString("ADDRESS", savedAddress);
+                userEditor.apply();
+
+                // Ghi nhớ đăng nhập nếu được chọn
+                SharedPreferences.Editor loginEditor = getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
                 if (ckMatKhau.isChecked()) {
-                    SharedPreferences.Editor editor = loginPrefs.edit();
-                    editor.putString("username", inputUsername);
-                    editor.putString("password", inputPassword);
-                    editor.putBoolean("remember", true);
-                    editor.apply();
+                    loginEditor.putBoolean("remember", true);
+                    loginEditor.putString("username", inputUsername);
+                    loginEditor.putString("password", inputPassword);
                 } else {
-                    loginPrefs.edit().clear().apply();
+                    loginEditor.clear();
                 }
+                loginEditor.apply();
 
                 // Chuyển sang MainActivity
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
+
             } else {
-                Toast.makeText(this, "Tên đăng nhập hoặc mật khẩu sai!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Chuyển sang màn đăng ký
         btnSignIn.setOnClickListener(v -> {
             startActivity(new Intent(this, RegisterActivity.class));
         });
 
+        // Nút đổi mật khẩu (chưa làm)
         btnDoiMatKhau.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng đang phát triển...", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ChangePasswordActivity.class));
         });
+
     }
 }

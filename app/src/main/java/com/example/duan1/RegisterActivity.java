@@ -14,10 +14,14 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtMa, txtTen, soDienThoai, edtDiaChi, txtPass;
     Button btnDangKy, btnBack;
 
+
+    public static String savedUsername = "";
+    public static String savedPassword = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dang_kyactivity);
+        setContentView(R.layout.activity_dang_kyactivity); // tên layout đăng ký của bạn
 
         txtMa = findViewById(R.id.txtma);
         txtTen = findViewById(R.id.txtten);
@@ -30,25 +34,34 @@ public class RegisterActivity extends AppCompatActivity {
         btnDangKy.setOnClickListener(v -> {
             String username = txtMa.getText().toString().trim();
             String password = txtPass.getText().toString().trim();
+            String ten = txtTen.getText().toString().trim();
+            String sdt = soDienThoai.getText().toString().trim();
+            String diaChi = edtDiaChi.getText().toString().trim();
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu", Toast.LENGTH_SHORT).show();
+            if (username.isEmpty() || password.isEmpty() || ten.isEmpty() || sdt.isEmpty() || diaChi.isEmpty()) {
+                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // ✅ Lưu thông tin bằng SharedPreferences
-            SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+            // Lưu thông tin người dùng vào SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
             editor.putString("username", username);
             editor.putString("password", password);
+            editor.putString("ten", ten);
+            editor.putString("sdt", sdt);
+            editor.putString("diachi", diaChi);
             editor.apply();
 
             Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
 
+            // Chuyển sang LoginActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
 
-        btnBack.setOnClickListener(v -> finish());
+
+        btnBack.setOnClickListener(v -> finish()); // Trở lại màn hình trước
     }
 }
+
