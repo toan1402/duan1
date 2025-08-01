@@ -179,9 +179,10 @@ public class MainActivity extends AppCompatActivity {
         // Banner setup
         bannerViewPager = findViewById(R.id.banner);
         bannerList = Arrays.asList(
-                R.drawable.comsuon,
-                R.drawable.banhmy,
-                R.drawable.ic_launcher_background
+                R.drawable.cafe1,
+                R.drawable.trasua1,
+                R.drawable.banhmy3,
+                R.drawable.pho1
         );
         BannerAdapter bannerAdapter = new BannerAdapter(this, bannerList);
         bannerViewPager.setAdapter(bannerAdapter);

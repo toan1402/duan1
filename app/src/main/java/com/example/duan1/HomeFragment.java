@@ -32,9 +32,10 @@ public class HomeFragment extends Fragment {
         // Setup banner
         bannerViewPager = view.findViewById(R.id.banner);
         bannerList = Arrays.asList(
-                R.drawable.comsuon,
-                R.drawable.banhmy,
-                R.drawable.ic_launcher_background
+                R.drawable.cafe,
+                R.drawable.trasua1,
+                R.drawable.banhmy3,
+                R.drawable.pho1
         );
         BannerAdapter adapter = new BannerAdapter(getContext(), bannerList);
         bannerViewPager.setAdapter(adapter);
