@@ -14,6 +14,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Tìm ID của BottomNavigationView
+        bottomNavigation = findViewById(R.id.bottom_nav);
+
+        // Load Fragment mặc định khi mở app
+        loadFragment(new HomeFragment());
+
+        // Xử lý khi chọn item trên BottomNavigationView
         bottomNavigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
 
@@ -30,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
             return loadFragment(selectedFragment);
         });
-
     }
+
 
     private boolean loadFragment(Fragment fragment) {
         if (fragment == null) return false;

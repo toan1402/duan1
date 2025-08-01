@@ -1,6 +1,7 @@
 package com.example.duan1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,14 +14,10 @@ public class RegisterActivity extends AppCompatActivity {
     EditText txtMa, txtTen, soDienThoai, edtDiaChi, txtPass;
     Button btnDangKy, btnBack;
 
-    // Giả lập lưu thông tin đơn giản (thay thế database thật)
-    public static String savedUsername = "";
-    public static String savedPassword = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dang_kyactivity); // tên layout đăng ký của bạn
+        setContentView(R.layout.activity_dang_kyactivity);
 
         txtMa = findViewById(R.id.txtma);
         txtTen = findViewById(R.id.txtten);
@@ -39,18 +36,19 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // Lưu thông tin tạm (bạn có thể thay bằng database, Firebase, SQLite, ...)
-            savedUsername = username;
-            savedPassword = password;
+            // ✅ Lưu thông tin bằng SharedPreferences
+            SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("username", username);
+            editor.putString("password", password);
+            editor.apply();
 
             Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
 
-            // Chuyển về màn hình đăng nhập
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
 
-        btnBack.setOnClickListener(v -> finish()); // Trở lại màn hình trước
+        btnBack.setOnClickListener(v -> finish());
     }
 }
-

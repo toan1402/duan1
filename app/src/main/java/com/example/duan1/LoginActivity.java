@@ -1,6 +1,5 @@
 package com.example.duan1;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dangnhap); // tên layout đăng nhập của bạn
+        setContentView(R.layout.activity_dangnhap); // tên layout đăng nhập
 
         txtUser = findViewById(R.id.txtuser);
         txtPass = findViewById(R.id.txtpass);
@@ -29,33 +28,40 @@ public class LoginActivity extends AppCompatActivity {
         btnDoiMatKhau = findViewById(R.id.btnDoiMatKhau);
         ckMatKhau = findViewById(R.id.ckMatkhau);
 
-        SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        boolean remember = preferences.getBoolean("remember", false);
+        // Đọc SharedPreferences lưu thông tin ghi nhớ đăng nhập
+        SharedPreferences loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        boolean remember = loginPrefs.getBoolean("remember", false);
 
         if (remember) {
-            txtUser.setText(preferences.getString("username", ""));
-            txtPass.setText(preferences.getString("password", ""));
+            txtUser.setText(loginPrefs.getString("username", ""));
+            txtPass.setText(loginPrefs.getString("password", ""));
             ckMatKhau.setChecked(true);
         }
 
         btnLogin.setOnClickListener(v -> {
-            String username = txtUser.getText().toString().trim();
-            String password = txtPass.getText().toString().trim();
+            String inputUsername = txtUser.getText().toString().trim();
+            String inputPassword = txtPass.getText().toString().trim();
 
-            if (username.equals(RegisterActivity.savedUsername) && password.equals(RegisterActivity.savedPassword)) {
+            // 🔒 Đọc tài khoản đã đăng ký từ SharedPreferences "user_data"
+            SharedPreferences userPrefs = getSharedPreferences("user_data", MODE_PRIVATE);
+            String savedUsername = userPrefs.getString("username", "");
+            String savedPassword = userPrefs.getString("password", "");
+
+            if (inputUsername.equals(savedUsername) && inputPassword.equals(savedPassword)) {
                 Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                // Lưu thông tin nếu nhớ mật khẩu
+
+                // Ghi nhớ tài khoản nếu chọn
                 if (ckMatKhau.isChecked()) {
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("username", username);
-                    editor.putString("password", password);
+                    SharedPreferences.Editor editor = loginPrefs.edit();
+                    editor.putString("username", inputUsername);
+                    editor.putString("password", inputPassword);
                     editor.putBoolean("remember", true);
                     editor.apply();
                 } else {
-                    preferences.edit().clear().apply();
+                    loginPrefs.edit().clear().apply();
                 }
 
-                // Vào trang chính hoặc trang chào mừng
+                // Chuyển sang MainActivity
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
             } else {
@@ -72,4 +78,3 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 }
-
