@@ -102,13 +102,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 intent.putExtra("image", product.getImageResId());
                 context.startActivity(intent);
             });
-// Mua ngay → thêm vào giỏ + chuyển sang màn hình xác nhận
+
+            // Mua ngay → thêm vào giỏ + mở giỏ
             btnBuyNow.setOnClickListener(v -> {
-                CartManager.addToCart(product); // Nếu muốn xóa giỏ sau mua, có thể sửa ở đây
-                Intent intent = new Intent(context, XacNhanThanhToanActivity.class);
+                CartManager.addToCart(product); // Nếu chưa có class này, mình sẽ giúp tạo
+                Intent intent = new Intent(context, CartActivity.class);
                 context.startActivity(intent);
             });
-
 
             // Nút xóa (chỉ hiện trong danh sách yêu thích)
             btnDelete.setVisibility(isFavoriteMode ? View.VISIBLE : View.GONE);
