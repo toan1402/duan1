@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,7 +52,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtGia;
         ImageView img;
-        Button btnBuyNow, btnDelete;
+        Button btnBuyNow, btnAddToCart, btnDelete;
         ImageButton btnFavorite;
 
         public ViewHolder(View itemView) {
@@ -60,6 +61,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             txtGia = itemView.findViewById(R.id.txtGia);
             img = itemView.findViewById(R.id.imgProduct);
             btnBuyNow = itemView.findViewById(R.id.btnBuyNow);
+            btnAddToCart = itemView.findViewById(R.id.btnAddToCart);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
             btnDelete = itemView.findViewById(R.id.btnDelete);
         }
@@ -99,11 +101,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 intent.putExtra("name", product.getName());
                 intent.putExtra("category", product.getCategory());
                 intent.putExtra("price", product.getPrice());
-                intent.putExtra("imageRes", product.getImageResId()); // key đúng là "imageRes"
+                intent.putExtra("imageRes", product.getImageResId());
                 context.startActivity(intent);
             });
 
-            // Mua ngay → thêm vào giỏ + mở giỏ
+            // Nút Giỏ hàng - thêm vào giỏ và hiện thông báo
+            btnAddToCart.setOnClickListener(v -> {
+                CartItem cartItem = new CartItem(
+                        product.getName(),
+                        product.getPrice(),
+                        1,
+                        product.getImageResId()
+                );
+                CartManager.addToCart(cartItem);
+                Toast.makeText(context, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            });
+
+            // Nút Mua ngay - thêm vào giỏ và mở màn hình đặt hàng thành công
             btnBuyNow.setOnClickListener(v -> {
                 CartItem cartItem = new CartItem(
                         product.getName(),
@@ -112,10 +126,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         product.getImageResId()
                 );
                 CartManager.addToCart(cartItem);
-                Intent intent = new Intent(context, CartActivity.class);
+
+                Intent intent = new Intent(context, ThanhToanThanhCongActivity.class);
                 context.startActivity(intent);
             });
-
 
             // Nút xóa (chỉ hiện trong danh sách yêu thích)
             btnDelete.setVisibility(isFavoriteMode ? View.VISIBLE : View.GONE);
