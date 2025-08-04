@@ -40,63 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(ProductAdapter.ViewHolder holder, int position) {
         Product product = productList.get(position);
-        holder.txtName.setText(product.getName());
-        holder.img.setImageResource(product.getImageResId());
-        holder.txtGia.setText("Giá: " + product.getPrice() + "đ");
-
-        // Hiển thị icon yêu thích
-        if (FavoriteManager.isFavorite(product)) {
-            holder.btnFavorite.setImageResource(R.drawable.ic_heart_filled);
-        } else {
-            holder.btnFavorite.setImageResource(R.drawable.ic_heart_outline);
-        }
-
-        // Xử lý nút yêu thích
-        holder.btnFavorite.setOnClickListener(v -> {
-            boolean isFav = FavoriteManager.isFavorite(product);
-            if (isFav) {
-                FavoriteManager.remove(product);
-                holder.btnFavorite.setImageResource(R.drawable.ic_heart_outline);
-                if (isFavoriteMode) {
-                    int pos = holder.getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION && pos < productList.size()) {
-                        productList.remove(pos);
-                        notifyItemRemoved(pos);
-                    }
-                }
-            } else {
-                FavoriteManager.add(product);
-                holder.btnFavorite.setImageResource(R.drawable.ic_heart_filled);
-            }
-        });
-
-        // Chi tiết sản phẩm
-        holder.img.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            intent.putExtra("name", product.getName());
-            intent.putExtra("category", product.getCategory());
-            intent.putExtra("price", product.getPrice());
-            intent.putExtra("image", product.getImageResId());
-            context.startActivity(intent);
-        });
-
-        // Mua ngay
-        holder.btnBuyNow.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CartActivity.class);
-            context.startActivity(intent);
-        });
-
-        // Xóa trong chế độ yêu thích
-        holder.btnDelete.setVisibility(isFavoriteMode ? View.VISIBLE : View.GONE);
-        holder.btnDelete.setOnClickListener(v -> {
-            int pos = holder.getAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && pos < productList.size()) {
-                Product p = productList.get(pos);
-                FavoriteManager.remove(p);
-                productList.remove(pos);
-                notifyItemRemoved(pos);
-            }
-        });
+        holder.bind(product, isFavoriteMode);
     }
 
     @Override
@@ -104,7 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return productList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtGia;
         ImageView img;
         Button btnBuyNow, btnDelete;
@@ -118,6 +62,65 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             btnBuyNow = itemView.findViewById(R.id.btnBuyNow);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+        }
+
+        public void bind(Product product, boolean isFavoriteMode) {
+            txtName.setText(product.getName());
+            txtGia.setText("Giá: " + product.getPrice() + "đ");
+            img.setImageResource(product.getImageResId());
+
+            // Hiển thị trạng thái yêu thích
+            btnFavorite.setImageResource(FavoriteManager.isFavorite(product)
+                    ? R.drawable.ic_heart_filled
+                    : R.drawable.ic_heart_outline);
+
+            // Xử lý yêu thích
+            btnFavorite.setOnClickListener(v -> {
+                boolean isFav = FavoriteManager.isFavorite(product);
+                if (isFav) {
+                    FavoriteManager.remove(product);
+                    btnFavorite.setImageResource(R.drawable.ic_heart_outline);
+                    if (isFavoriteMode) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION && pos < productList.size()) {
+                            productList.remove(pos);
+                            notifyItemRemoved(pos);
+                        }
+                    }
+                } else {
+                    FavoriteManager.add(product);
+                    btnFavorite.setImageResource(R.drawable.ic_heart_filled);
+                }
+            });
+
+            // Chi tiết sản phẩm
+            img.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("name", product.getName());
+                intent.putExtra("category", product.getCategory());
+                intent.putExtra("price", product.getPrice());
+                intent.putExtra("image", product.getImageResId());
+                context.startActivity(intent);
+            });
+// Mua ngay → thêm vào giỏ + chuyển sang màn hình xác nhận
+            btnBuyNow.setOnClickListener(v -> {
+                CartManager.addToCart(product); // Nếu muốn xóa giỏ sau mua, có thể sửa ở đây
+                Intent intent = new Intent(context, XacNhanThanhToanActivity.class);
+                context.startActivity(intent);
+            });
+
+
+            // Nút xóa (chỉ hiện trong danh sách yêu thích)
+            btnDelete.setVisibility(isFavoriteMode ? View.VISIBLE : View.GONE);
+            btnDelete.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && pos < productList.size()) {
+                    Product p = productList.get(pos);
+                    FavoriteManager.remove(p);
+                    productList.remove(pos);
+                    notifyItemRemoved(pos);
+                }
+            });
         }
     }
 }
