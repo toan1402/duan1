@@ -1,50 +1,44 @@
 package com.example.duan1;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CartManager {
-    private static final Map<Product, Integer> cartMap = new HashMap<>();
+    private static final List<CartItem> cartItems = new ArrayList<>();
 
-    public static void addToCart(Product product) {
-        int currentQty = cartMap.getOrDefault(product, 0);
-        cartMap.put(product, currentQty + 1);
+    public static void addToCart(CartItem item) {
+        // Kiểm tra nếu món đã có thì tăng số lượng
+        for (CartItem existingItem : cartItems) {
+            if (existingItem.getName().equals(item.getName())) {
+                existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
+                return;
+            }
+        }
+        // Nếu chưa có thì thêm mới
+        cartItems.add(item);
     }
 
-    public static void updateQuantity(Product product, int quantity) {
-        if (quantity <= 0) {
-            cartMap.remove(product);
-        } else {
-            cartMap.put(product, quantity);
+    public static void removeFromCart(String name) {
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getName().equals(name)) {
+                cartItems.remove(i);
+                return;
+            }
         }
     }
 
-    public static void removeFromCart(Product product) {
-        cartMap.remove(product);
-    }
-
-    public static Map<Product, Integer> getCartMap() {
-        return new HashMap<>(cartMap);
-    }
-
-    public static List<Product> getCartItems() {
-        return new ArrayList<>(cartMap.keySet());
-    }
-
-    public static int getQuantity(Product product) {
-        return cartMap.getOrDefault(product, 0);
-    }
-
     public static void clearCart() {
-        cartMap.clear();
+        cartItems.clear();
+    }
+
+    public static List<CartItem> getCartItems() {
+        return new ArrayList<>(cartItems); // Trả về bản sao để tránh lỗi ngoài ý muốn
     }
 
     public static int getTotalPrice() {
         int total = 0;
-        for (Map.Entry<Product, Integer> entry : cartMap.entrySet()) {
-            total += entry.getKey().getPrice() * entry.getValue();
+        for (CartItem item : cartItems) {
+            total += item.getPrice() * item.getQuantity();
         }
         return total;
     }

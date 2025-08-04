@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_back"
-    android:contentDescription="Back"
-    android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+       android:background="?attr/selectableItemBackgroundBorderless"
     android:layout_gravity="start" />
 
     <!-- Tiêu đề -->
@@ -24,10 +24,11 @@
         android:text="Danh sách món yêu thích"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#E5733D"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="16dp" />
+        android:textColor="#FFFFFF"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="16dp" />
+
 
     <!-- Danh sách -->
     <androidx.recyclerview.widget.RecyclerView

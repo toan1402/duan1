@@ -27,17 +27,14 @@
         <activity android:name=".LoginActivity" android:exported="true" />
         <activity android:name=".MainActivity" android:exported="true" />
         <activity android:name=".RegisterActivity" />
-
-        <!-- ✅ Các màn khác -->
         <activity android:name=".ProductDetailActivity" />
         <activity android:name=".CartActivity" />
         <activity android:name=".XacNhanThanhToanActivity" />
-
-        <!-- ✅ Thêm các activity còn thiếu -->
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".NotificationActivity" />
         <activity android:name=".AccountActivity" />
         <activity android:name=".EditAccountActivity" />
         <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ChiTietActivity" />
     </application>
 </manifest>

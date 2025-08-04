@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Map;
+import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        ImageButton btnBack = findViewById(R.id.btn_back);
+        ImageButton btnBack = findViewById(R.id.btnBack);
         Button btnCheckout = findViewById(R.id.btn_checkout);
         tvTotalPrice = findViewById(R.id.tv_total_price);
         cartList = findViewById(R.id.cart_list);
@@ -32,15 +32,11 @@ public class CartActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
             CartManager.clearCart();
 
-            new android.os.Handler().postDelayed(() -> {
-                Intent intent = new Intent(CartActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }, 3000);
+            Intent intent = new Intent(CartActivity.this, XacNhanThanhToanActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         btnBack.setOnClickListener(v -> finish());
@@ -50,10 +46,8 @@ public class CartActivity extends AppCompatActivity {
         cartList.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (Map.Entry<Product, Integer> entry : CartManager.getCartMap().entrySet()) {
-            Product product = entry.getKey();
-            int quantity = entry.getValue();
-
+        List<CartItem> items = CartManager.getCartItems();
+        for (CartItem item : items) {
             View itemView = inflater.inflate(R.layout.item_cart, cartList, false);
 
             TextView name = itemView.findViewById(R.id.tv_food_name);
@@ -64,31 +58,31 @@ public class CartActivity extends AppCompatActivity {
             ImageButton btnDec = itemView.findViewById(R.id.btn_decrease);
             ImageButton btnDelete = itemView.findViewById(R.id.btn_delete);
 
-            name.setText("Tên: " + product.getName());
-            price.setText("Giá: " + product.getPrice() + "đ");
-            img.setImageResource(product.getImageResId());
-            tvQty.setText(String.valueOf(quantity));
+            name.setText("Tên: " + item.getName());
+            price.setText("Giá: " + item.getPrice() + "đ");
+            tvQty.setText(String.valueOf(item.getQuantity()));
+            img.setImageResource(item.getImageResId());
 
             btnInc.setOnClickListener(v -> {
-                CartManager.updateQuantity(product, CartManager.getQuantity(product) + 1);
-                tvQty.setText(String.valueOf(CartManager.getQuantity(product)));
+                item.setQuantity(item.getQuantity() + 1);
+                tvQty.setText(String.valueOf(item.getQuantity()));
                 updateTotalPrice();
             });
 
             btnDec.setOnClickListener(v -> {
-                int newQty = CartManager.getQuantity(product) - 1;
+                int newQty = item.getQuantity() - 1;
                 if (newQty > 0) {
-                    CartManager.updateQuantity(product, newQty);
+                    item.setQuantity(newQty);
                     tvQty.setText(String.valueOf(newQty));
                 } else {
-                    CartManager.removeFromCart(product);
+                    CartManager.removeFromCart(item.getName());
                     cartList.removeView(itemView);
                 }
                 updateTotalPrice();
             });
 
             btnDelete.setOnClickListener(v -> {
-                CartManager.removeFromCart(product);
+                CartManager.removeFromCart(item.getName());
                 cartList.removeView(itemView);
                 updateTotalPrice();
             });

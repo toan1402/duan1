@@ -62,7 +62,6 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/comsuon"
                     android:scaleType="centerCrop" />
 
                 <!-- Thông tin và nút -->
