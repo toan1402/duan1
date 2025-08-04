@@ -134,7 +134,6 @@
 //        handler.postDelayed(runnable, 5000);
 //    }
 //}
-
 package com.example.duan1;
 
 import android.content.Intent;
@@ -142,14 +141,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.duan1.Product;
-import com.example.duan1.ProductAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -168,15 +166,15 @@ public class MainActivity extends AppCompatActivity {
     private ProductAdapter adapter;
     private List<Product> allProducts = new ArrayList<>();
 
-    // Các nút danh mục
     private ImageButton btnBanhMi, btnCom, btnPho, btnTraSua, btnCafe;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Banner setup
+        // Banner
         bannerViewPager = findViewById(R.id.banner);
         bannerList = Arrays.asList(
                 R.drawable.cafe1,
@@ -188,13 +186,31 @@ public class MainActivity extends AppCompatActivity {
         bannerViewPager.setAdapter(bannerAdapter);
         autoSlideBanner();
 
-        // RecyclerView setup
+        // RecyclerView
         rvFoods = findViewById(R.id.rvFoods);
         rvFoods.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter(this, new ArrayList<>(), false);
         rvFoods.setAdapter(adapter);
 
-        // Ánh xạ ImageButton
+        // SearchView
+        searchView = findViewById(R.id.searchView);
+        searchView.setIconifiedByDefault(false); // luôn hiển thị ô tìm
+        searchView.setQueryHint("Tìm kiếm sản phẩm...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterByKeyword(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterByKeyword(newText);
+                return true;
+            }
+        });
+
+        // Nút danh mục
         btnBanhMi = findViewById(R.id.btnBanhMi);
         btnCom = findViewById(R.id.btnCom);
         btnPho = findViewById(R.id.btnPho);
@@ -202,42 +218,40 @@ public class MainActivity extends AppCompatActivity {
         btnCafe = findViewById(R.id.btnCafe);
 
         // Load dữ liệu
-        Data();
-
-        // Gán toàn bộ sản phẩm cho Adapter
+        loadData();
         adapter.setData(allProducts);
 
-        // Bắt sự kiện lọc theo danh mục
+        // Click danh mục
         btnBanhMi.setOnClickListener(v -> filterByCategory("Bánh mì"));
         btnCom.setOnClickListener(v -> filterByCategory("Cơm"));
         btnPho.setOnClickListener(v -> filterByCategory("Phở"));
         btnTraSua.setOnClickListener(v -> filterByCategory("Trà sữa"));
         btnCafe.setOnClickListener(v -> filterByCategory("Cà phê"));
 
-        // 👉 Bottom Navigation xử lý chuyển màn bằng if-else
+        // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_home) {
-                // Đã ở Home
                 return true;
             } else if (itemId == R.id.nav_favorite) {
-                startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
+                startActivity(new Intent(this, FavoriteActivity.class));
                 return true;
             } else if (itemId == R.id.nav_notification) {
-                startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+                startActivity(new Intent(this, NotificationActivity.class));
                 return true;
             } else if (itemId == R.id.donhang) {
-                startActivity(new Intent(MainActivity.this, CartActivity.class));
+                startActivity(new Intent(this, CartActivity.class));
                 return true;
             } else if (itemId == R.id.nav_account) {
-                startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                startActivity(new Intent(this, AccountActivity.class));
                 return true;
             }
 
             return false;
         });
+
     }
 
     private void autoSlideBanner() {
@@ -249,7 +263,8 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(runnable, 5000);
     }
 
-    private void Data() {
+    private void loadData() {
+        allProducts.clear();
         allProducts.add(new Product("Bánh mì bò nướng phô mai", "Bánh mì", R.drawable.banhmy1, 35000));
         allProducts.add(new Product("Bánh mì trứng xúc xích", "Bánh mì", R.drawable.banhmy2, 30000));
         allProducts.add(new Product("Bánh mì pate chả lụa", "Bánh mì", R.drawable.banhmy3, 32000));
@@ -280,7 +295,17 @@ public class MainActivity extends AppCompatActivity {
     private void filterByCategory(String category) {
         List<Product> filtered = new ArrayList<>();
         for (Product p : allProducts) {
-            if (p.getCategory().equals(category)) {
+            if (p.getCategory().equalsIgnoreCase(category)) {
+                filtered.add(p);
+            }
+        }
+        adapter.setData(filtered);
+    }
+
+    private void filterByKeyword(String keyword) {
+        List<Product> filtered = new ArrayList<>();
+        for (Product p : allProducts) {
+            if (p.getName().toLowerCase().contains(keyword.toLowerCase())) {
                 filtered.add(p);
             }
         }
