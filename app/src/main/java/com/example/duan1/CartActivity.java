@@ -1,12 +1,15 @@
 package com.example.duan1;
 
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
@@ -25,15 +28,29 @@ public class CartActivity extends AppCompatActivity {
         cartList = findViewById(R.id.cart_list);
 
         loadCartItems();
-
         btnCheckout.setOnClickListener(v -> {
             if (CartManager.getCartItems().isEmpty()) {
-                Toast.makeText(this, "Giỏ hàng đang trống!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            // Lấy thông tin người dùng từ SharedPreferences
+            SharedPreferences userPrefs = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+            String name = userPrefs.getString("USERNAME", "Không có tên");
+            String phone = userPrefs.getString("PHONE", "Chưa có số");
+            String address = userPrefs.getString("ADDRESS", "Chưa có địa chỉ");
+
+            // Tạo đối tượng Order với toàn bộ giỏ hàng
+            Order order = new Order(name, phone, address,
+                    new ArrayList<>(CartManager.getCartItems()), System.currentTimeMillis());
+
+            // Lưu vào lịch sử đơn hàng
+            OrderManager.addOrder(order);
+
+            // Xóa giỏ hàng
             CartManager.clearCart();
 
+            // Mở lịch sử đơn hàng
             Intent intent = new Intent(CartActivity.this, XacNhanThanhToanActivity.class);
             startActivity(intent);
             finish();

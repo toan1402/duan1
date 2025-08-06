@@ -89,7 +89,7 @@
             android:id="@+id/btnBuyNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mua ngay"
+            android:text="Thêm vào giỏ hàng"
             android:layout_marginTop="12dp"
             android:textColor="#000000"
             android:backgroundTint="#F2FF00"
