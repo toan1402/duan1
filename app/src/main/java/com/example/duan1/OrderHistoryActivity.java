@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,35 +34,39 @@ public class OrderHistoryActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         for (Order order : orders) {
-            View itemView = inflater.inflate(R.layout.item_order, orderList, false);
+            View orderView = inflater.inflate(R.layout.item_order, orderList, false);
 
-            TextView tvProducts = itemView.findViewById(R.id.tv_product_info);
-            TextView tvTotalPrice = itemView.findViewById(R.id.tv_price);
-            TextView tvDate = itemView.findViewById(R.id.tv_date);
-            TextView tvCustomer = itemView.findViewById(R.id.tv_customer_name);
-            TextView tvPhone = itemView.findViewById(R.id.tv_phone);
-            TextView tvAddress = itemView.findViewById(R.id.tv_address);
+            LinearLayout itemContainer = orderView.findViewById(R.id.item_container);
+            TextView tvTotalPrice = orderView.findViewById(R.id.tv_price);
+            TextView tvDate = orderView.findViewById(R.id.tv_date);
+            TextView tvCustomer = orderView.findViewById(R.id.tv_customer_name);
+            TextView tvPhone = orderView.findViewById(R.id.tv_phone);
+            TextView tvAddress = orderView.findViewById(R.id.tv_address);
 
-            // Tạo chuỗi danh sách sản phẩm + tính tổng tiền
-            StringBuilder productInfo = new StringBuilder();
             int totalPrice = 0;
+
             for (CartItem item : order.getItems()) {
-                productInfo.append("- ")
-                        .append(item.getName())
-                        .append(" x").append(item.getQuantity())
-                        .append(" (").append(item.getPrice()).append("đ)\n");
+                View productView = inflater.inflate(R.layout.item_order_product, itemContainer, false);
+
+                ImageView imgProduct = productView.findViewById(R.id.img_product);
+                TextView tvProductInfo = productView.findViewById(R.id.tv_product_info);
+
+                imgProduct.setImageResource(item.getImageResId());
+                tvProductInfo.setText("• " + item.getName() + " x" + item.getQuantity() + " (" + item.getPrice() + "đ)");
 
                 totalPrice += item.getPrice() * item.getQuantity();
+                itemContainer.addView(productView);
             }
 
-            tvProducts.setText(productInfo.toString().trim());
             tvTotalPrice.setText("Tổng tiền: " + totalPrice + "đ");
             tvDate.setText("Ngày: " + sdf.format(new Date(order.getTimestamp())));
             tvCustomer.setText("Khách hàng: " + order.getCustomerName());
             tvPhone.setText("SĐT: " + order.getPhoneNumber());
             tvAddress.setText("Địa chỉ: " + order.getAddress());
 
-            orderList.addView(itemView);
+            orderList.addView(orderView);
         }
+
+
     }
 }

@@ -39,16 +39,14 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.tvName.setText(food.getName());
         holder.tvPrice.setText(food.getPrice());
 
-        // Kiểm tra URL ảnh và load bằng Glide
         if (food.getImageUrl() != null && !food.getImageUrl().isEmpty()) {
             Glide.with(context)
                     .load(food.getImageUrl())
-                    .placeholder(R.drawable.ic_launcher_background) // ảnh mặc định khi đang tải
-                    .error(R.drawable.ic_launcher_foreground) // ảnh khi lỗi tải ảnh
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_foreground)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.imgFood);
         } else {
-            // Nếu không có URL, dùng ảnh mặc định
             holder.imgFood.setImageResource(R.drawable.comsuon);
         }
     }
@@ -69,4 +67,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             tvPrice = itemView.findViewById(R.id.tvFoodPrice);
         }
     }
+    public void setFoods(List<Food> foodList) {
+        this.foodList = foodList;
+    }
+
 }

@@ -6,8 +6,6 @@
     android:padding="16dp"
     android:gravity="center_horizontal"
     android:background="#FFF">
-
-
     <!-- Nút back -->
     <ImageButton
         android:id="@+id/btnBack"

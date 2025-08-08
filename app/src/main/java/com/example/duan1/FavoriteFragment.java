@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 public class FavoriteFragment extends Fragment {
 
     public FavoriteFragment() {
-        // Required empty public constructor
     }
 
     @Override

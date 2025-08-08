@@ -1,4 +1,3 @@
-
 package com.example.duan1;
 
 import android.content.Intent;
@@ -25,41 +24,68 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable runnable;
     private int currentPage = 0;
-    private List<Integer> bannerList;
 
     private RecyclerView rvFoods;
     private ProductAdapter adapter;
     private List<Product> allProducts = new ArrayList<>();
 
-    private ImageButton btnBanhMi, btnCom, btnPho, btnTraSua, btnCafe;
     private SearchView searchView;
+    private ImageButton btnBanhMi, btnCom, btnPho, btnTraSua, btnCafe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Banner
+        initViews();
+        setupBanner();
+        setupRecyclerView();
+        setupSearchView();
+        setupCategoryButtons();
+        setupBottomNavigation();
+
+        loadData();
+        adapter.setData(allProducts);
+    }
+
+    private void initViews() {
         bannerViewPager = findViewById(R.id.banner);
-        bannerList = Arrays.asList(
+        rvFoods = findViewById(R.id.rvFoods);
+        searchView = findViewById(R.id.searchView);
+        btnBanhMi = findViewById(R.id.btnBanhMi);
+        btnCom = findViewById(R.id.btnCom);
+        btnPho = findViewById(R.id.btnPho);
+        btnTraSua = findViewById(R.id.btnTraSua);
+        btnCafe = findViewById(R.id.btnCafe);
+    }
+
+    private void setupBanner() {
+        List<Integer> bannerList = Arrays.asList(
                 R.drawable.cafe1,
                 R.drawable.trasua1,
                 R.drawable.banhmy3,
-                R.drawable.pho1
+                R.drawable.pho2
         );
+
         BannerAdapter bannerAdapter = new BannerAdapter(this, bannerList);
         bannerViewPager.setAdapter(bannerAdapter);
-        autoSlideBanner();
 
-        // RecyclerView
-        rvFoods = findViewById(R.id.rvFoods);
-        rvFoods.setLayoutManager(new LinearLayoutManager(this));
+        runnable = () -> {
+            if (currentPage == bannerList.size()) currentPage = 0;
+            bannerViewPager.setCurrentItem(currentPage++, true);
+            handler.postDelayed(runnable, 5000);
+        };
+        handler.postDelayed(runnable, 5000);
+    }
+
+    private void setupRecyclerView() {
         adapter = new ProductAdapter(this, new ArrayList<>(), false);
+        rvFoods.setLayoutManager(new LinearLayoutManager(this));
         rvFoods.setAdapter(adapter);
+    }
 
-        // SearchView
-        searchView = findViewById(R.id.searchView);
-        searchView.setIconifiedByDefault(false); // luôn hiển thị ô tìm
+    private void setupSearchView() {
+        searchView.setIconifiedByDefault(false);
         searchView.setQueryHint("Tìm kiếm sản phẩm...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -74,66 +100,48 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
-        // Nút danh mục
-        btnBanhMi = findViewById(R.id.btnBanhMi);
-        btnCom = findViewById(R.id.btnCom);
-        btnPho = findViewById(R.id.btnPho);
-        btnTraSua = findViewById(R.id.btnTraSua);
-        btnCafe = findViewById(R.id.btnCafe);
-
-        // Load dữ liệu
-        loadData();
-        adapter.setData(allProducts);
-
-        // Click danh mục
+    private void setupCategoryButtons() {
         btnBanhMi.setOnClickListener(v -> filterByCategory("Bánh mì"));
         btnCom.setOnClickListener(v -> filterByCategory("Cơm"));
         btnPho.setOnClickListener(v -> filterByCategory("Phở"));
         btnTraSua.setOnClickListener(v -> filterByCategory("Trà sữa"));
         btnCafe.setOnClickListener(v -> filterByCategory("Cà phê"));
+    }
 
-        // Bottom Navigation
+    private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_home) {
-                return true;
-            } else if (itemId == R.id.nav_favorite) {
+            if (itemId == R.id.nav_home) return true;
+            if (itemId == R.id.nav_favorite) {
                 startActivity(new Intent(this, FavoriteActivity.class));
                 return true;
-            } else if (itemId == R.id.nav_order_history) {
+            }
+            if (itemId == R.id.nav_order_history) {
                 startActivity(new Intent(this, OrderHistoryActivity.class));
                 return true;
-        } else if (itemId == R.id.donhang) {
+            }
+            if (itemId == R.id.donhang) {
                 startActivity(new Intent(this, CartActivity.class));
                 return true;
-            } else if (itemId == R.id.nav_account) {
+            }
+            if (itemId == R.id.nav_account) {
                 startActivity(new Intent(this, AccountActivity.class));
                 return true;
             }
-
             return false;
         });
-
-    }
-
-    private void autoSlideBanner() {
-        runnable = () -> {
-            if (currentPage == bannerList.size()) currentPage = 0;
-            bannerViewPager.setCurrentItem(currentPage++, true);
-            handler.postDelayed(runnable, 5000);
-        };
-        handler.postDelayed(runnable, 5000);
     }
 
     private void loadData() {
         allProducts.clear();
+
         allProducts.add(new Product("Bánh mì bò nướng phô mai", "Bánh mì", R.drawable.banhmy1, 35000));
         allProducts.add(new Product("Bánh mì trứng xúc xích", "Bánh mì", R.drawable.banhmy2, 30000));
         allProducts.add(new Product("Bánh mì pate chả lụa", "Bánh mì", R.drawable.banhmy3, 32000));
-        allProducts.add(new Product("Bánh mì đặc sản Hội An", "Bánh mì", R.drawable.banhmy, 40000));
+        allProducts.add(new Product("Bánh mì đặc sản Hội An", "Bánh mì", R.drawable.banhmi4, 40000));
         allProducts.add(new Product("Bánh mì thịt quay giòn bì", "Bánh mì", R.drawable.banhmy, 38000));
 
         allProducts.add(new Product("Cơm gà sốt cay Hàn Quốc", "Cơm", R.drawable.com, 45000));

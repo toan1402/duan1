@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment {
         rvFoods.setAdapter(foodAdapter);
 
         return view;
+
     }
 
     private void autoSlideBanner() {
